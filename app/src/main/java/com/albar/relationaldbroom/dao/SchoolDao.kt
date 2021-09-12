@@ -1,10 +1,9 @@
 package com.albar.relationaldbroom.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
+import androidx.room.*
 import com.albar.relationaldbroom.entities.Director
 import com.albar.relationaldbroom.entities.School
+import com.albar.relationaldbroom.entities.relations.SchoolAndDirector
 
 @Dao
 interface SchoolDao {
@@ -16,4 +15,9 @@ interface SchoolDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertDirector(director: Director)
+
+    @Transaction
+    @Query("SELECT * FROM school WHERE schoolName = :schoolName")
+    suspend fun getSchoolAndDirectorWithSchooName(schoolName: String): List<SchoolAndDirector>
+
 }
